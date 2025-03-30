@@ -1,0 +1,22 @@
+apiVersion: v2
+name: my-application
+description: A Helm chart for my complete application
+version: 0.1.0
+
+
+dependencies:
+  - name: consumer
+    version: 0.1.0
+    repository: ""
+  - name: producer
+    version: 0.1.0
+    repository: ""
+  - name: serviceMonitor
+    version: 0.1.0
+    repository: ""
+  - name: rabbitmq
+    version: 15.4.0
+    repository: "https://charts.bitnami.com/bitnami"
+  - name: kube-prometheus-stack
+    version: 70.2.1
+    repository: ""

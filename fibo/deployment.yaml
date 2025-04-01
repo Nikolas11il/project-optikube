@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fibonacci-app
+  labels:
+    app: fibonacci-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fibonacci-app
+  template:
+    metadata:
+      labels:
+        app: fibonacci-app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/"
+    spec:
+      containers:
+      - name: fibonacci-app
+        image: fibonacci-app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: metrics
+        env:
+        - name: CALCULATION_INTERVAL
+          value: "5"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fibonacci-app-service
+  labels:
+    app: fibonacci-app
+spec:
+  selector:
+    app: fibonacci-app
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: metrics
+  type: ClusterIP
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: fibonacci-app-monitor
+  labels:
+    app: fibonacci-app
+    release: prometheus  # תלוי באופן ההתקנה של prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app: fibonacci-app
+  endpoints:
+  - port: metrics
+    interval: 15s

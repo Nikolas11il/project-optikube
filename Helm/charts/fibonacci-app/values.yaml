@@ -1,0 +1,70 @@
+# Default values for fibonacci-app.
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  repository: optikubeniki/fibo
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: v1.0.0
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8000"
+  prometheus.io/path: "/"
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8000
+  name: metrics
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# אפליקציית פיבונאצ'י מקבלת הגדרת זמן (בשניות) עבור מרווח בין חישובים
+fibonacci:
+  calculationInterval: 5
+
+# הגדרות למוניטור של Prometheus
+prometheus:
+  serviceMonitor:
+    enabled: true
+    interval: 15s
+    # additionalLabels מאפשר להוסיף תוויות נוספות ל-ServiceMonitor
+    # כגון release: prometheus עבור prometheus-operator

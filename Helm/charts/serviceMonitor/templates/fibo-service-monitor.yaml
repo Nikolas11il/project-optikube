@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Release.Name }}-fibonacci-app
+  labels:
+    app.kubernetes.io/name: fibonacci-app
+    release: {{ $.Release.Name | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: fibonacci-app-{{ .Chart.Version }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fibonacci-app
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  endpoints:
+    - port: {{ .Release.Name }}-fibonacci-app
+      interval: 15s
+      path: /

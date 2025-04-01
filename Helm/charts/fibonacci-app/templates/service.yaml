@@ -1,8 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-fibonacci-app
+  name: {{ .Release.Name }}-fibonacci-service
   labels:
+    name: {{ .Release.Name }}-fibonacci-service
     app.kubernetes.io/name: fibonacci-app
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}

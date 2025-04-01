@@ -16,7 +16,7 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels:
-      name: {{ .Release.Name }}-consumer
+      name: {{ .Release.Name }}-fibonacci-service 
   endpoints:
   - port: metrics 
     interval: 15s

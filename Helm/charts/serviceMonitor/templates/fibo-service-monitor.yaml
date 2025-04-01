@@ -17,4 +17,4 @@ spec:
   endpoints:
     - port: {{ .Release.Name }}-fibonacci-app
       interval: 15s
-      path: /
+      path: /metrics
